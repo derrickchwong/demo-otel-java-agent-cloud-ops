@@ -1,0 +1,9 @@
+resources:
+- deploy.yml
+secretGenerator:
+- name: contact-db-cred
+  envs:
+  - ./contact-db.env
+- name: api-key
+  files:
+  - ./api-key.json

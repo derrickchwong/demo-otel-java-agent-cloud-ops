@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: contact-client
+management:
+  tracing:
+    sampling:
+      probability: 1.0

@@ -1,0 +1,15 @@
+FROM openjdk:17
+VOLUME /tmp
+COPY contact-client/target/*.jar app.jar
+
+ARG otel_java_agent_version=v1.24.0
+ARG gcp_otel_exporter_auto_version=0.25.1
+
+# OTEL Java Agent
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/${otel_java_agent_version}/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar
+
+# Extension for GCP Cloud Ops
+ADD https://repo1.maven.org/maven2/com/google/cloud/opentelemetry/exporter-auto/${gcp_otel_exporter_auto_version}-alpha/exporter-auto-${gcp_otel_exporter_auto_version}-alpha-shaded.jar /exporter-auto.jar
+
+COPY contact-client/m2c-demo-599331d7b44d.json /contact-api.json
+ENTRYPOINT ["java","-javaagent:/opentelemetry-javaagent.jar","-Dotel.javaagent.extensions=/exporter-auto.jar","-Dotel.traces.exporter=google_cloud_trace","-Dotel.metrics.exporter=google_cloud_monitoring","-jar","/app.jar"]

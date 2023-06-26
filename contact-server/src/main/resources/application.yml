@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: contact-server
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+management:
+  tracing:
+    sampling:
+      probability: 1.0
