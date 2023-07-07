@@ -5,15 +5,11 @@ build:
   - image: us-central1-docker.pkg.dev/m2c-demo/container/contact-server
     docker:
       dockerfile: Dockerfile-server
-      cacheFrom:
-      - us-central1-docker.pkg.dev/m2c-demo/container/contact-server
     sync:
       auto: false
   - image: us-central1-docker.pkg.dev/m2c-demo/container/contact-client
     docker:
       dockerfile: Dockerfile-client
-      cacheFrom:
-      - us-central1-docker.pkg.dev/m2c-demo/container/contact-client
     sync:
       auto: false
   googleCloudBuild: {}

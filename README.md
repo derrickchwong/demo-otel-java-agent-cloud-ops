@@ -10,6 +10,12 @@ Automatic instrumentation with Java uses a Java agent JAR that can be attached t
 
 ### What is Auto-Configuration for OpenTelemetry in Google Cloud?
 
+OpenTelemetry Java SDK provides an autoconfigure module where all configuration can be done entirely through Java system properties or environment variables.
+
+To leverage the GCP extensions to this, simply add the exporter-auto dependency to your project.
+
+Refer to [this](https://github.com/GoogleCloudPlatform/opentelemetry-operations-java/blob/main/exporters/auto/README.md) for details. 
+
 ### How does it look like? 
 
 ![Cloud Trace](cloud-trace.png)
