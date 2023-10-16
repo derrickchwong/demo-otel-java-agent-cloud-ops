@@ -20,21 +20,30 @@ spec:
         image: us-central1-docker.pkg.dev/m2c-demo/container/contact-client
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /api-key.json
+          value: /api-key/api-key.json
         - name: GOOGLE_CLOUD_PROJECT
           value: m2c-demo
         - name: OTEL_TRACES_EXPORTER
           value: google_cloud_trace
         - name: OTEL_METRICS_EXPORTER
           value: google_cloud_monitoring
+        - name: OTEL_SERVICE_NAME
+          value: contact-client
+        - name: NAMESPACE
+          value: cloud-ops-demo
+        - name: CONTAINER_NAME
+          value: contact-client
         ports:
         - containerPort: 8080
+          name: web
+        - containerPort: 9464
+          name: metrics
         resources:
           limits:
             memory: "1Gi"
             cpu: "1000m"
         volumeMounts:
-        - mountPath: /api-key.json
+        - mountPath: /api-key
           name: api-key
           readOnly: true
       volumes:
@@ -55,6 +64,9 @@ spec:
   - port: 80
     targetPort: 8080
     name: web
+  - port: 9464
+    targetPort: 9464
+    name: metrics
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,24 +90,33 @@ spec:
         image: us-central1-docker.pkg.dev/m2c-demo/container/contact-server
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /api-key.json
+          value: /api-key/api-key.json
         - name: GOOGLE_CLOUD_PROJECT
           value: m2c-demo
         - name: OTEL_TRACES_EXPORTER
           value: google_cloud_trace
         - name: OTEL_METRICS_EXPORTER
           value: google_cloud_monitoring
+        - name: OTEL_SERVICE_NAME
+          value: contact-server
+        - name: NAMESPACE
+          value: cloud-ops-demo
+        - name: CONTAINER_NAME
+          value: contact-server
         envFrom:
         - secretRef:
             name: contact-db-cred
         ports:
         - containerPort: 8080
+          name: web
+        - containerPort: 9464
+          name: metrics
         resources:
           limits:
             memory: "1Gi"
             cpu: "1000m"
         volumeMounts:
-        - mountPath: /api-key.json
+        - mountPath: /api-key
           name: api-key
           readOnly: true
       volumes:
@@ -111,7 +132,35 @@ metadata:
 spec:
   selector:
     app: contact-server
+  type: LoadBalancer
   ports:
   - port: 80
     targetPort: 8080
     name: web
+  - port: 9464
+    targetPort: 9464
+    name: metrics
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: contact-client-pod-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: contact-client
+  endpoints:
+  - port: metrics
+    interval: 30s
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: contact-server-pod-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: contact-server
+  endpoints:
+  - port: metrics
+    interval: 30s

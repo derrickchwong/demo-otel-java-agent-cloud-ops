@@ -2,6 +2,7 @@ package com.example.democontacts;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,15 +17,25 @@ public class ContactServiceController {
   private ContactRepository contactRepository;
 
   @PostMapping("/contacts")
-  public Contact addContact(@RequestBody Contact contact){
+  public ResponseEntity<Contact> addContact(@RequestBody Contact contact){
     log.info("new contact {}", contact);
-    return contactRepository.save(contact);
+
+    if(Math.random() < 0.1){
+      return ResponseEntity.status(500).build();
+    }
+
+    return ResponseEntity.ok(contactRepository.save(contact));
   }
 
   @GetMapping("/contacts/{id}")
-  public Contact getContactById(@PathVariable Long id){
+  public ResponseEntity<Contact> getContactById(@PathVariable Long id){
 
-    return contactRepository.getReferenceById(id);
+    // return 500 error randomly
+    if(Math.random() < 0.2){
+      return ResponseEntity.status(500).build();
+    }
+
+    return ResponseEntity.ok(contactRepository.getReferenceById(id));
   }
 
 }
