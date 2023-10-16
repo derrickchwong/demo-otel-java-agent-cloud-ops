@@ -1,0 +1,147 @@
+{
+  "category": "CUSTOM",
+  "dashboardFilters": [],
+  "displayName": "Combined SLO demo",
+  "etag": "62afb9fdd2451976a28ff441eccd2706",
+  "labels": {},
+  "mosaicLayout": {
+    "columns": 48,
+    "tiles": [
+      {
+        "height": 9,
+        "widget": {
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 70
+              }
+            ],
+            "timeSeriesQuery": {
+              "outputFullDuration": true,
+              "prometheusQuery": "sum(increase(http_server_requests_count{status = \"200\", uri=\"/contacts/{id}\" }[7d]))  \n/\nsum(increase(http_server_requests_count{uri=\"/contacts/{id}\" }[7d]))  \n*\nsum(increase(http_server_requests_count{status = \"200\", uri=\"/contacts\", container=\"contact-client\"}[7d]))  \n/\nsum(increase(http_server_requests_count{uri=\"/contacts\", container=\"contact-client\"}[7d]))  \n* 100\n \n\n# sum(http_server_requests_count{status = \"200\", uri=\"/contacts/{id}\" }) / sum(http_server_requests_count{uri=\"/contacts/{id}\"}) \n# * \n# sum(http_server_requests_count{status = \"200\", uri=\"/contacts\", container=\"contact-client\" }) / sum(http_server_requests_count{uri=\"/contacts\", container=\"contact-client\"}) \n# * 100\n\n# [${__interval}]",
+              "unitOverride": ""
+            }
+          },
+          "title": "Combined Success Rate 7 days"
+        },
+        "width": 14,
+        "xPos": 27,
+        "yPos": 0
+      },
+      {
+        "height": 23,
+        "widget": {
+          "title": "HTTP Server Request",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "measures": [],
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "prometheusQuery": "rate(http_server_requests_count{uri != \"/actuator/health\", uri != \"/**\"}[${__interval}])",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        },
+        "width": 41,
+        "xPos": 0,
+        "yPos": 9
+      },
+      {
+        "height": 9,
+        "widget": {
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 70
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              }
+            ],
+            "timeSeriesQuery": {
+              "outputFullDuration": true,
+              "prometheusQuery": "sum(increase(http_server_requests_count{status = \"200\", uri=\"/contacts/{id}\" }[7d])) / sum(increase(http_server_requests_count{uri=\"/contacts/{id}\"}[7d])) \n\n* 100\n",
+              "unitOverride": ""
+            }
+          },
+          "title": "Success Rate 7 days for GET API"
+        },
+        "width": 13,
+        "xPos": 0,
+        "yPos": 0
+      },
+      {
+        "height": 9,
+        "widget": {
+          "scorecard": {
+            "gaugeView": {
+              "lowerBound": 0,
+              "upperBound": 100
+            },
+            "thresholds": [
+              {
+                "color": "YELLOW",
+                "direction": "BELOW",
+                "label": "",
+                "value": 70
+              },
+              {
+                "color": "RED",
+                "direction": "BELOW",
+                "label": "",
+                "value": 90
+              }
+            ],
+            "timeSeriesQuery": {
+              "outputFullDuration": true,
+              "prometheusQuery": "sum(increase(http_server_requests_count{status = \"200\", uri=\"/contacts\", container=\"contact-client\" }[7d])) \n/ \nsum(increase(http_server_requests_count{uri=\"/contacts\", container=\"contact-client\"}[7d])) \n* 100\n\n# [${__interval}]",
+              "unitOverride": ""
+            }
+          },
+          "title": "Success Rate 7 days for POST API"
+        },
+        "width": 14,
+        "xPos": 13,
+        "yPos": 0
+      }
+    ]
+  },
+  "name": "projects/546905294224/dashboards/77184968-e38d-4fc9-9e37-8438549654c9"
+}
