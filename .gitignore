@@ -1,3 +1,4 @@
 .idea
 k8s/api-key.json
 k8s/contact-db.env
+gmp-test-sa-key.json
