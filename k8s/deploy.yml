@@ -19,14 +19,6 @@ spec:
         imagePullPolicy: Always
         image: us-central1-docker.pkg.dev/m2c-demo/container/contact-client
         env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /api-key/api-key.json
-        - name: GOOGLE_CLOUD_PROJECT
-          value: m2c-demo
-        - name: OTEL_TRACES_EXPORTER
-          value: google_cloud_trace
-        - name: OTEL_METRICS_EXPORTER
-          value: google_cloud_monitoring
         - name: OTEL_SERVICE_NAME
           value: contact-client
         - name: NAMESPACE
@@ -89,14 +81,6 @@ spec:
         imagePullPolicy: Always
         image: us-central1-docker.pkg.dev/m2c-demo/container/contact-server
         env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /api-key/api-key.json
-        - name: GOOGLE_CLOUD_PROJECT
-          value: m2c-demo
-        - name: OTEL_TRACES_EXPORTER
-          value: google_cloud_trace
-        - name: OTEL_METRICS_EXPORTER
-          value: google_cloud_monitoring
         - name: OTEL_SERVICE_NAME
           value: contact-server
         - name: NAMESPACE
